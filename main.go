@@ -3,12 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	high := 0
+	podium := Podium{0, 0, 0}
 	for _, itemsCalories := range ParseCaloriesInput() {
-		totalItemCalories := itemsCalories.calculate()
-		if totalItemCalories > high {
-			high = totalItemCalories
-		}
+		podium.handle(itemsCalories.calculate())
 	}
-	fmt.Printf("Higher calories count is: %d\n", high)
+	fmt.Printf("Total calories count from top 3 Elses is: %d\n", podium.sum())
 }
