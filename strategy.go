@@ -9,7 +9,7 @@ import (
 
 type StrategyPlay struct {
 	opponent string
-	me       string
+	action   string
 }
 
 func ParseStrategy() []StrategyPlay {

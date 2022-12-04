@@ -7,7 +7,7 @@ func main() {
 
 	for _, round := range ParseStrategy() {
 		result := Play(round)
-		fmt.Printf("Strategy: Opponent plays '%s'; I play '%s'. Score: %d\n", round.opponent, round.me, result.score)
+		fmt.Printf("Strategy: Opponent plays '%s'; Outcome is '%s'. Score: %d\n", round.opponent, round.action, result.score)
 
 		score += result.score
 	}

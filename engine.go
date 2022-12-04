@@ -9,70 +9,82 @@ const (
 	paperPoints    = 2
 	scissorsPoints = 3
 
-	rockOpponent     = "A"
-	rockMe           = "X"
-	paperOpponent    = "B"
-	paperMe          = "Y"
-	scissorsOpponent = "C"
-	scissorsMe       = "Z"
+	rock     = "A"
+	paper    = "B"
+	scissors = "C"
 )
 
 type PlayResult struct {
-	round      StrategyPlay
-	movePoints int
-	points     int
-	score      int
+	round StrategyPlay
+	score int
 }
 
 func Play(round StrategyPlay) PlayResult {
 	var result PlayResult
 	result.round = round
-	result.movePoints = calculateMovePoints(round.me)
-
-	if isDraw(round) {
-		result.points = drawPoints
-	} else if isWin(round) {
-		result.points = winPoints
-	} else {
-		result.points = losePoints
-	}
-
-	result.score = result.movePoints + result.points
+	result.score = calculateScore(round)
 
 	return result
 }
 
-func isWin(round StrategyPlay) bool {
-	if round.opponent == rockOpponent && round.me == paperMe {
-		return true
-	} else if round.opponent == scissorsOpponent && round.me == rockMe {
-		return true
-	} else if round.opponent == paperOpponent && round.me == scissorsMe {
-		return true
+func calculateScore(round StrategyPlay) int {
+	score := 0
+
+	if isDraw(round.action) {
+		score += drawPoints + drawMovePoints(round)
+	} else if isWin(round.action) {
+		score += winPoints + winMovePoints(round)
+	} else {
+		score += losePoints + loseMovePoints(round)
 	}
-	return false
+
+	return score
 }
 
-func isDraw(round StrategyPlay) bool {
-	if round.opponent == rockOpponent && round.me == rockMe {
-		return true
-	} else if round.opponent == scissorsOpponent && round.me == scissorsMe {
-		return true
-	} else if round.opponent == paperOpponent && round.me == paperMe {
-		return true
-	}
-	return false
-}
-
-func calculateMovePoints(move string) int {
-	switch move {
-	case paperMe:
-		return paperPoints
-	case rockMe:
-		return rockPoints
-	case scissorsMe:
+func loseMovePoints(round StrategyPlay) int {
+	if round.opponent == rock {
 		return scissorsPoints
-	default:
-		return 0
+	} else if round.opponent == paper {
+		return rockPoints
+	} else if round.opponent == scissors {
+		return paperPoints
 	}
+	return 0
+}
+
+func winMovePoints(round StrategyPlay) int {
+	if round.opponent == rock {
+		return paperPoints
+	} else if round.opponent == paper {
+		return scissorsPoints
+	} else if round.opponent == scissors {
+		return rockPoints
+	}
+	return 0
+}
+
+func drawMovePoints(round StrategyPlay) int {
+	if round.opponent == rock {
+		return rockPoints
+	} else if round.opponent == paper {
+		return paperPoints
+	} else if round.opponent == scissors {
+		return scissorsPoints
+	}
+	return 0
+}
+
+func isWin(action string) bool {
+	if action == "Z" {
+		return true
+	}
+
+	return false
+}
+
+func isDraw(action string) bool {
+	if action == "Y" {
+		return true
+	}
+	return false
 }
